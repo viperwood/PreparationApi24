@@ -9,13 +9,15 @@ public partial class Medialcard
 
     public int Patientid { get; set; }
 
-    public int Diagnosisid { get; set; }
+    public int? Diagnosisid { get; set; }
 
-    public DateTime Datanextvisit { get; set; }
+    public DateTime? Datanextvisit { get; set; }
 
     public DateTime Datalastvisit { get; set; }
 
-    public virtual Diagnosis Diagnosis { get; set; } = null!;
+    public int Medialcardcod { get; set; }
+
+    public virtual Diagnosis? Diagnosis { get; set; }
 
     public virtual ICollection<Diagnostic> Diagnostics { get; set; } = new List<Diagnostic>();
 

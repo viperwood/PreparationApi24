@@ -106,3 +106,4 @@ C:\Users\prdb\RiderProjects\PreparationApi\PreparationApi\bin\Debug\net8.0\tr\Mi
 C:\Users\prdb\RiderProjects\PreparationApi\PreparationApi\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\prdb\RiderProjects\PreparationApi\PreparationApi\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\prdb\RiderProjects\PreparationApi\PreparationApi\obj\Debug\net8.0\PreparationApi.sourcelink.json
+C:\Users\prdb\RiderProjects\PreparationApi\PreparationApi\bin\Debug\net8.0\Newtonsoft.Json.dll

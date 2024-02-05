@@ -46,7 +46,7 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Password = 492492; Username = postgres; DAtabase = postgres");
+        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Username = postgres; Database = postgres; password = 492492");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -135,11 +135,11 @@ public partial class PostgresContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("datanextvisit");
             entity.Property(e => e.Diagnosisid).HasColumnName("diagnosisid");
+            entity.Property(e => e.Medialcardcod).HasColumnName("medialcardcod");
             entity.Property(e => e.Patientid).HasColumnName("patientid");
 
             entity.HasOne(d => d.Diagnosis).WithMany(p => p.Medialcards)
                 .HasForeignKey(d => d.Diagnosisid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("medialcard_diagnosisid_fkey");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Medialcards)

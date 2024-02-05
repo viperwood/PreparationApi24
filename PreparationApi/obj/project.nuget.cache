@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KAuzhmOEEDP6SaXTYY1Wa56nA8Bz9C9JagMuYjaqgYeH0n6GZ1L63En7CBVArX6yEIEnxcP/ghO8R80qRusvmQ==",
+  "dgSpecHash": "dj8SXb0V7kDMZyN0DJp7YGJmcsIyjkOnYBAN9POQBQKYA/5g4a8WUA9KXuqsV9/EOU7wapUotAjf2mmAKOu5ug==",
   "success": true,
   "projectFilePath": "C:\\Users\\prdb\\RiderProjects\\PreparationApi\\PreparationApi\\PreparationApi.csproj",
   "expectedPackageFiles": [
@@ -33,6 +33,7 @@
     "C:\\Users\\prdb\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\prdb\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\prdb\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\prdb\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\prdb\\.nuget\\packages\\npgsql\\8.0.0\\npgsql.8.0.0.nupkg.sha512",
     "C:\\Users\\prdb\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\8.0.0\\npgsql.entityframeworkcore.postgresql.8.0.0.nupkg.sha512",
     "C:\\Users\\prdb\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
