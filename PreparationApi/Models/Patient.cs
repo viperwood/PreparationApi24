@@ -21,6 +21,8 @@ public partial class Patient
 
     public int Insurancecompanyid { get; set; }
 
+    public virtual ICollection<Hospitalization> Hospitalizations { get; set; } = new List<Hospitalization>();
+
     public virtual Insurancecompany Insurancecompany { get; set; } = null!;
 
     public virtual ICollection<Medialcard> Medialcards { get; set; } = new List<Medialcard>();

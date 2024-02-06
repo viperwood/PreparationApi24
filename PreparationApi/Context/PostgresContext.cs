@@ -16,11 +16,19 @@ public partial class PostgresContext : DbContext
     {
     }
 
+    public virtual DbSet<Condition> Conditions { get; set; }
+
+    public virtual DbSet<Department> Departments { get; set; }
+
     public virtual DbSet<Diagnosis> Diagnoses { get; set; }
 
     public virtual DbSet<Diagnostic> Diagnostics { get; set; }
 
     public virtual DbSet<Gender> Genders { get; set; }
+
+    public virtual DbSet<Hospitaliz> Hospitalizs { get; set; }
+
+    public virtual DbSet<Hospitalization> Hospitalizations { get; set; }
 
     public virtual DbSet<Insurancecompany> Insurancecompanies { get; set; }
 
@@ -36,6 +44,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Proceduretipe> Proceduretipes { get; set; }
 
+    public virtual DbSet<Purpose> Purposes { get; set; }
+
     public virtual DbSet<Result> Results { get; set; }
 
     public virtual DbSet<Roletable> Roletables { get; set; }
@@ -46,11 +56,35 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Username = postgres; Database = postgres; password = 492492");
+        => optionsBuilder.UseNpgsql("host = 89.110.53.87; password = 492492; Database = postgres; Username = postgres");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pg_catalog", "adminpack");
+
+        modelBuilder.Entity<Condition>(entity =>
+        {
+            entity.HasKey(e => e.Conditionsid).HasName("conditions_pkey");
+
+            entity.ToTable("conditions", "Preparation");
+
+            entity.Property(e => e.Conditionsid).HasColumnName("conditionsid");
+            entity.Property(e => e.Conditionsname)
+                .HasMaxLength(100)
+                .HasColumnName("conditionsname");
+        });
+
+        modelBuilder.Entity<Department>(entity =>
+        {
+            entity.HasKey(e => e.Departmentid).HasName("department_pkey");
+
+            entity.ToTable("department", "Preparation");
+
+            entity.Property(e => e.Departmentid).HasColumnName("departmentid");
+            entity.Property(e => e.Departmentname)
+                .HasMaxLength(100)
+                .HasColumnName("departmentname");
+        });
 
         modelBuilder.Entity<Diagnosis>(entity =>
         {
@@ -109,6 +143,69 @@ public partial class PostgresContext : DbContext
                 .HasColumnName("gendername");
         });
 
+        modelBuilder.Entity<Hospitaliz>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("hospitaliz", "Preparation");
+
+            entity.Property(e => e.Code).HasColumnName("code");
+            entity.Property(e => e.Conditionsname)
+                .HasMaxLength(100)
+                .HasColumnName("conditionsname");
+            entity.Property(e => e.Departmentname)
+                .HasMaxLength(100)
+                .HasColumnName("departmentname");
+            entity.Property(e => e.Endhospital)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("endhospital");
+            entity.Property(e => e.Fio)
+                .HasMaxLength(100)
+                .HasColumnName("fio");
+            entity.Property(e => e.Purposename)
+                .HasMaxLength(100)
+                .HasColumnName("purposename");
+            entity.Property(e => e.Starthospital)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("starthospital");
+        });
+
+        modelBuilder.Entity<Hospitalization>(entity =>
+        {
+            entity.HasKey(e => e.Hospitalizationid).HasName("hospitalization_pkey");
+
+            entity.ToTable("hospitalization", "Preparation");
+
+            entity.Property(e => e.Hospitalizationid).HasColumnName("hospitalizationid");
+            entity.Property(e => e.Code).HasColumnName("code");
+            entity.Property(e => e.Conditionsid).HasColumnName("conditionsid");
+            entity.Property(e => e.Departmentid).HasColumnName("departmentid");
+            entity.Property(e => e.Endhospital)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("endhospital");
+            entity.Property(e => e.Patientid).HasColumnName("patientid");
+            entity.Property(e => e.Purposeid).HasColumnName("purposeid");
+            entity.Property(e => e.Starthospital)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("starthospital");
+
+            entity.HasOne(d => d.Conditions).WithMany(p => p.Hospitalizations)
+                .HasForeignKey(d => d.Conditionsid)
+                .HasConstraintName("hospitalization_conditionsid_fkey");
+
+            entity.HasOne(d => d.Department).WithMany(p => p.Hospitalizations)
+                .HasForeignKey(d => d.Departmentid)
+                .HasConstraintName("hospitalization_departmentid_fkey");
+
+            entity.HasOne(d => d.Patient).WithMany(p => p.Hospitalizations)
+                .HasForeignKey(d => d.Patientid)
+                .HasConstraintName("hospitalization_patientid_fkey");
+
+            entity.HasOne(d => d.Purpose).WithMany(p => p.Hospitalizations)
+                .HasForeignKey(d => d.Purposeid)
+                .HasConstraintName("hospitalization_purposeid_fkey");
+        });
+
         modelBuilder.Entity<Insurancecompany>(entity =>
         {
             entity.HasKey(e => e.Insurancecompanyid).HasName("insurancecompany_pkey");
@@ -140,6 +237,7 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.Diagnosis).WithMany(p => p.Medialcards)
                 .HasForeignKey(d => d.Diagnosisid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("medialcard_diagnosisid_fkey");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Medialcards)
@@ -248,6 +346,18 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Procedurename)
                 .HasMaxLength(100)
                 .HasColumnName("procedurename");
+        });
+
+        modelBuilder.Entity<Purpose>(entity =>
+        {
+            entity.HasKey(e => e.Purposeid).HasName("purpose_pkey");
+
+            entity.ToTable("purpose", "Preparation");
+
+            entity.Property(e => e.Purposeid).HasColumnName("purposeid");
+            entity.Property(e => e.Purposename)
+                .HasMaxLength(100)
+                .HasColumnName("purposename");
         });
 
         modelBuilder.Entity<Result>(entity =>
