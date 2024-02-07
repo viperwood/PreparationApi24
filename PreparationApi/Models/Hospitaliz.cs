@@ -7,7 +7,9 @@ public partial class Hospitaliz
 {
     public DateTime? Starthospital { get; set; }
 
-    public DateTime? Endhospital { get; set; }
+    public string? Diagnosisname { get; set; }
+
+    public int? Lengthhospitalization { get; set; }
 
     public int? Code { get; set; }
 

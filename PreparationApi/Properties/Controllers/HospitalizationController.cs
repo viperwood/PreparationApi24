@@ -7,11 +7,11 @@ namespace PreparationApi.Properties.Controllers;
 public class HospitalizationController : Controller
 {
     [HttpGet("GetHospitolization")]
-    public IActionResult GetHospitolization(int code)
+    public IActionResult GetHospitolization(int code, string name)
     {
-        if (code != null)
+        if (code != null && name != null)
         {
-            return Ok(Helper.Database.Hospitalizs.Where(x => x.Code == code));
+            return Ok(Helper.Database.Hospitalizs.Where(x => x.Code == code && x.Fio == name));
         }
         return Ok();
     }

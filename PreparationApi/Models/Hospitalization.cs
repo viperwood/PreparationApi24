@@ -15,9 +15,9 @@ public partial class Hospitalization
 
     public int? Conditionsid { get; set; }
 
-    public DateTime Starthospital { get; set; }
+    public DateTime? Starthospital { get; set; }
 
-    public DateTime? Endhospital { get; set; }
+    public int Lengthhospitalization { get; set; }
 
     public int Code { get; set; }
 
