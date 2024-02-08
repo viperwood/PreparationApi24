@@ -56,7 +56,7 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; Username = postgres; Password = 492492");
+        => optionsBuilder.UseNpgsql("host = 89.110.53.87; database = postgres; username = postgres; password = 492492");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -149,6 +149,9 @@ public partial class PostgresContext : DbContext
                 .HasNoKey()
                 .ToView("hospitaliz", "Preparation");
 
+            entity.Property(e => e.Cancellation)
+                .HasMaxLength(1000)
+                .HasColumnName("cancellation");
             entity.Property(e => e.Code).HasColumnName("code");
             entity.Property(e => e.Conditionsname)
                 .HasMaxLength(100)
@@ -166,6 +169,7 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Purposename)
                 .HasMaxLength(100)
                 .HasColumnName("purposename");
+            entity.Property(e => e.Refusal).HasColumnName("refusal");
             entity.Property(e => e.Starthospital)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("starthospital");
@@ -178,12 +182,18 @@ public partial class PostgresContext : DbContext
             entity.ToTable("hospitalization", "Preparation");
 
             entity.Property(e => e.Hospitalizationid).HasColumnName("hospitalizationid");
+            entity.Property(e => e.Cancellation)
+                .HasMaxLength(1000)
+                .HasColumnName("cancellation");
             entity.Property(e => e.Code).HasColumnName("code");
             entity.Property(e => e.Conditionsid).HasColumnName("conditionsid");
             entity.Property(e => e.Departmentid).HasColumnName("departmentid");
             entity.Property(e => e.Lengthhospitalization).HasColumnName("lengthhospitalization");
             entity.Property(e => e.Patientid).HasColumnName("patientid");
             entity.Property(e => e.Purposeid).HasColumnName("purposeid");
+            entity.Property(e => e.Refusal)
+                .HasDefaultValue(false)
+                .HasColumnName("refusal");
             entity.Property(e => e.Starthospital)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("starthospital");

@@ -17,9 +17,13 @@ public partial class Hospitalization
 
     public DateTime? Starthospital { get; set; }
 
-    public int Lengthhospitalization { get; set; }
+    public int? Lengthhospitalization { get; set; }
 
     public int Code { get; set; }
+
+    public bool Refusal { get; set; }
+
+    public string? Cancellation { get; set; }
 
     public virtual Condition? Conditions { get; set; }
 

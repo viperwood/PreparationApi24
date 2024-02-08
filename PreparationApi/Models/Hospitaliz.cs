@@ -7,7 +7,11 @@ public partial class Hospitaliz
 {
     public DateTime? Starthospital { get; set; }
 
+    public bool? Refusal { get; set; }
+
     public string? Diagnosisname { get; set; }
+
+    public string? Cancellation { get; set; }
 
     public int? Lengthhospitalization { get; set; }
 

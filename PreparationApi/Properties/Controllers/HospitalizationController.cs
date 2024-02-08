@@ -7,7 +7,7 @@ namespace PreparationApi.Properties.Controllers;
 public class HospitalizationController : Controller
 {
     [HttpGet("GetHospitolization")]
-    public IActionResult GetHospitolization(int code, string name)
+    public IActionResult GetHospitolization(int code, string? name)
     {
         if (code != null && name != null)
         {

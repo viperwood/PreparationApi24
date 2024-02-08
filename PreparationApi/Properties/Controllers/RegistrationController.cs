@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PreparationApi.Models;
 
 namespace PreparationApi.Properties.Controllers;
@@ -10,7 +9,7 @@ public class RegistrationController : Controller
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="cont">Регистрация пользователя</param>
+    /// <param name="registrationmodel">Данные для регистрации пользователя</param>
     /// <returns></returns>
     [HttpPost("PostReg")]
     //Пост запрос для регистрации
@@ -22,46 +21,46 @@ public class RegistrationController : Controller
         Medialcard medialcard = new Medialcard();
         //Проверка на наличие пациента 
         if (Helper.Database.Patients
-                .Where(x => x.Numberpolis == registrationmodel.numberpolis)
+                .Where(x => x.Numberpolis == registrationmodel.Numberpolis)
                 .Count() == 0)
         {
             //Проверка на наличие юзера в базе
             
             if (Helper.Database.Users
-                    .Where(x => x.Numberp == registrationmodel.numberp && x.Seriesp == registrationmodel.numberp)
+                    .Where(x => x.Numberp == registrationmodel.Numberp && x.Seriesp == registrationmodel.Numberp)
                     .Count() == 0)
             {
                 //Добавление юзера
-                user.Email = registrationmodel.email;
-                user.Address = registrationmodel.address;
+                user.Email = registrationmodel.Email;
+                user.Address = registrationmodel.Address;
                 user.Gender = Helper.Database.Genders
-                    .Where(x => x.Gendername == registrationmodel.genders)
+                    .Where(x => x.Gendername == registrationmodel.Genders)
                     .Select(x => x.Genderid)
                     .ToList()[0];
-                user.Numberp = registrationmodel.numberp;
+                user.Numberp = registrationmodel.Numberp;
                 user.Roleuser = 3;
-                user.Seriesp = registrationmodel.serialp;
-                user.Birthday = registrationmodel.birthday;
-                user.Phone = registrationmodel.phone;
-                user.Fio = registrationmodel.fio;
+                user.Seriesp = registrationmodel.Serialp;
+                user.Birthday = registrationmodel.Birthday;
+                user.Phone = registrationmodel.Phone;
+                user.Fio = registrationmodel.Fio;
                 Helper.Database.Users.Add(user);
                 Helper.Database.SaveChanges();
             }
             //Добавление пациента
-            patient.Dataissuemc = registrationmodel.dataissuemc;
+            patient.Dataissuemc = registrationmodel.Dataissuemc;
             patient.Useridpatient = Helper.Database.Users
-                .Where(x => x.Email == registrationmodel.email)
+                .Where(x => x.Email == registrationmodel.Email)
                 .Select(x => x.Userid)
                 .ToList()[0];
-            patient.Dataexpirationinsurancepolisy = registrationmodel.dataexpirationinsurancepolisy;
-            patient.Numberpolis = registrationmodel.numberpolis;
-            patient.Policyvalidity = registrationmodel.policyvalidity;
+            patient.Dataexpirationinsurancepolisy = registrationmodel.Dataexpirationinsurancepolisy;
+            patient.Numberpolis = registrationmodel.Numberpolis;
+            patient.Policyvalidity = registrationmodel.Policyvalidity;
             patient.Placeofworkid = Helper.Database.Placeofworks
-                .Where(x => x.Placeofworkname == registrationmodel.placeofworksid)
+                .Where(x => x.Placeofworkname == registrationmodel.Placeofworksid)
                 .Select(x => x.Placeofworkid)
                 .ToList()[0];
             patient.Insurancecompanyid = Helper.Database.Insurancecompanies
-                .Where(x => x.Insurancecompanyname == registrationmodel.insurancecompanysid)
+                .Where(x => x.Insurancecompanyname == registrationmodel.Insurancecompanysid)
                 .Select(x=> x.Insurancecompanyid)
                 .ToList()[0];
             Helper.Database.Patients.Add(patient);
@@ -78,7 +77,7 @@ public class RegistrationController : Controller
             } while (Helper.Database.Medialcards.Where(x => x.Medialcardcod == cod).Count() == 1);
             medialcard.Medialcardcod = cod;
             medialcard.Patientid = Helper.Database.Patients
-                .Where(x => x.Numberpolis == registrationmodel.numberpolis)
+                .Where(x => x.Numberpolis == registrationmodel.Numberpolis)
                 .Select(x => x.Patientid)
                 .ToList()[0];
             Helper.Database.Medialcards.Add(medialcard);
