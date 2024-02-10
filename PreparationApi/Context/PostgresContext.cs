@@ -38,6 +38,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Patient> Patients { get; set; }
 
+    public virtual DbSet<Patientfullinfo> Patientfullinfos { get; set; }
+
     public virtual DbSet<Placeofwork> Placeofworks { get; set; }
 
     public virtual DbSet<Prescribedmedication> Prescribedmedications { get; set; }
@@ -56,7 +58,7 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("host = 89.110.53.87; database = postgres; username = postgres; password = 492492");
+        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; Username = postgres; Password = 492492");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -304,6 +306,56 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Useridpatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("patient_useridpatient_fkey");
+        });
+
+        modelBuilder.Entity<Patientfullinfo>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("patientfullinfo", "Preparation");
+
+            entity.Property(e => e.Address)
+                .HasMaxLength(100)
+                .HasColumnName("address");
+            entity.Property(e => e.Birthday)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("birthday");
+            entity.Property(e => e.Dataexpirationinsurancepolisy)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("dataexpirationinsurancepolisy");
+            entity.Property(e => e.Dataissuemc)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("dataissuemc");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("email");
+            entity.Property(e => e.Fio)
+                .HasMaxLength(100)
+                .HasColumnName("fio");
+            entity.Property(e => e.Foto)
+                .HasMaxLength(100)
+                .HasColumnName("foto");
+            entity.Property(e => e.Gendername)
+                .HasMaxLength(100)
+                .HasColumnName("gendername");
+            entity.Property(e => e.Insurancecompanyname)
+                .HasMaxLength(100)
+                .HasColumnName("insurancecompanyname");
+            entity.Property(e => e.Numberp).HasColumnName("numberp");
+            entity.Property(e => e.Numberpolis)
+                .HasMaxLength(100)
+                .HasColumnName("numberpolis");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(100)
+                .HasColumnName("phone");
+            entity.Property(e => e.Placeofworkname)
+                .HasMaxLength(100)
+                .HasColumnName("placeofworkname");
+            entity.Property(e => e.Policyvalidity)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("policyvalidity");
+            entity.Property(e => e.Roleuser).HasColumnName("roleuser");
+            entity.Property(e => e.Seriesp).HasColumnName("seriesp");
         });
 
         modelBuilder.Entity<Placeofwork>(entity =>

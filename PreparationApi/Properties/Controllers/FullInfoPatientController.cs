@@ -8,7 +8,6 @@ public class FullInfoPatientController : Controller
     [HttpGet("GetFullInfoPatient")]
     public IActionResult GetFullInfoPatient(string name)
     {
-        string nameId = Helper.Database.Users.Where(x => x.Fio == name).Select(x => x.Userid).ToString()!;
-        return Ok(Helper.Database.Patients.Where(x => x.Useridpatient.ToString() == nameId));
+        return Ok(Helper.Database.Patientfullinfos.Where(x => x.Fio == name));
     }
 }
