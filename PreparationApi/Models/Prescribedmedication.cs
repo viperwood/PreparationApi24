@@ -5,17 +5,23 @@ namespace PreparationApi.Models;
 
 public partial class Prescribedmedication
 {
-    public int Pmid { get; set; }
+    public int? Pmid { get; set; }
 
-    public int Madicationsid { get; set; }
+    public int? Madicationsid { get; set; }
 
     public int Resultpmid { get; set; }
 
-    public int Procedureid { get; set; }
+    public int? Procedureid { get; set; }
 
-    public virtual Medication Madications { get; set; } = null!;
+    public string? Dosage { get; set; }
 
-    public virtual Proceduretipe Procedure { get; set; } = null!;
+    public string? Receptionformat { get; set; }
+
+    public string? Recommendations { get; set; }
+
+    public virtual Medication? Madications { get; set; }
+
+    public virtual Proceduretipe? Procedure { get; set; }
 
     public virtual Result Resultpm { get; set; } = null!;
 }

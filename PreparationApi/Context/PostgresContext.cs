@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using PreparationApi.Models;
+using PreparationApi.Properties.Controllers;
 
 namespace PreparationApi.Context;
 
@@ -58,7 +59,7 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; Username = postgres; Password = 492492");
+        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; username = postgres; password = 492492");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -117,11 +118,6 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Medialcardid).HasColumnName("medialcardid");
             entity.Property(e => e.Tipeeventid).HasColumnName("tipeeventid");
 
-            entity.HasOne(d => d.DoctorNavigation).WithMany(p => p.Diagnostics)
-                .HasForeignKey(d => d.Doctor)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("diagnostic_doctor_fkey");
-
             entity.HasOne(d => d.Medialcard).WithMany(p => p.Diagnostics)
                 .HasForeignKey(d => d.Medialcardid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -151,9 +147,6 @@ public partial class PostgresContext : DbContext
                 .HasNoKey()
                 .ToView("hospitaliz", "Preparation");
 
-            entity.Property(e => e.Cancellation)
-                .HasMaxLength(1000)
-                .HasColumnName("cancellation");
             entity.Property(e => e.Code).HasColumnName("code");
             entity.Property(e => e.Conditionsname)
                 .HasMaxLength(100)
@@ -161,17 +154,15 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Departmentname)
                 .HasMaxLength(100)
                 .HasColumnName("departmentname");
-            entity.Property(e => e.Diagnosisname)
-                .HasMaxLength(100)
-                .HasColumnName("diagnosisname");
+            entity.Property(e => e.Endhospital)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("endhospital");
             entity.Property(e => e.Fio)
                 .HasMaxLength(100)
                 .HasColumnName("fio");
-            entity.Property(e => e.Lengthhospitalization).HasColumnName("lengthhospitalization");
             entity.Property(e => e.Purposename)
                 .HasMaxLength(100)
                 .HasColumnName("purposename");
-            entity.Property(e => e.Refusal).HasColumnName("refusal");
             entity.Property(e => e.Starthospital)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("starthospital");
@@ -190,6 +181,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Code).HasColumnName("code");
             entity.Property(e => e.Conditionsid).HasColumnName("conditionsid");
             entity.Property(e => e.Departmentid).HasColumnName("departmentid");
+            entity.Property(e => e.Endhospital)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("endhospital");
             entity.Property(e => e.Lengthhospitalization).HasColumnName("lengthhospitalization");
             entity.Property(e => e.Patientid).HasColumnName("patientid");
             entity.Property(e => e.Purposeid).HasColumnName("purposeid");
@@ -236,6 +230,9 @@ public partial class PostgresContext : DbContext
             entity.ToTable("medialcard", "Preparation");
 
             entity.Property(e => e.Mcid).HasColumnName("mcid");
+            entity.Property(e => e.Anamnesis)
+                .HasMaxLength(100)
+                .HasColumnName("anamnesis");
             entity.Property(e => e.Datalastvisit)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("datalastvisit");
@@ -245,6 +242,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Diagnosisid).HasColumnName("diagnosisid");
             entity.Property(e => e.Medialcardcod).HasColumnName("medialcardcod");
             entity.Property(e => e.Patientid).HasColumnName("patientid");
+            entity.Property(e => e.Symptoms)
+                .HasMaxLength(100)
+                .HasColumnName("symptoms");
 
             entity.HasOne(d => d.Diagnosis).WithMany(p => p.Medialcards)
                 .HasForeignKey(d => d.Diagnosisid)
@@ -305,7 +305,7 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.UseridpatientNavigation).WithMany(p => p.Patients)
                 .HasForeignKey(d => d.Useridpatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("patient_useridpatient_fkey");
+                .HasConstraintName("patient_fk");
         });
 
         modelBuilder.Entity<Patientfullinfo>(entity =>
@@ -377,18 +377,25 @@ public partial class PostgresContext : DbContext
             entity.ToTable("prescribedmedications", "Preparation");
 
             entity.Property(e => e.Pmid).HasColumnName("pmid");
+            entity.Property(e => e.Dosage)
+                .HasMaxLength(100)
+                .HasColumnName("dosage");
             entity.Property(e => e.Madicationsid).HasColumnName("madicationsid");
             entity.Property(e => e.Procedureid).HasColumnName("procedureid");
+            entity.Property(e => e.Receptionformat)
+                .HasMaxLength(100)
+                .HasColumnName("receptionformat");
+            entity.Property(e => e.Recommendations)
+                .HasMaxLength(100)
+                .HasColumnName("recommendations");
             entity.Property(e => e.Resultpmid).HasColumnName("resultpmid");
 
             entity.HasOne(d => d.Madications).WithMany(p => p.Prescribedmedications)
                 .HasForeignKey(d => d.Madicationsid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("prescribedmedications_madicationsid_fkey");
 
             entity.HasOne(d => d.Procedure).WithMany(p => p.Prescribedmedications)
                 .HasForeignKey(d => d.Procedureid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("prescribedmedications_procedureid_fkey");
 
             entity.HasOne(d => d.Resultpm).WithMany(p => p.Prescribedmedications)

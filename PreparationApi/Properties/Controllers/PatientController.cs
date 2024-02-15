@@ -10,7 +10,8 @@ public class PatientController : Controller
     {
         return Ok(Helper.Database.Users.Where(x => x.Roleuser == 3).Select(x => new
         {
-            x.Fio
+            x.Fio,
+            x.Userid
         }).ToList());
     }
 }

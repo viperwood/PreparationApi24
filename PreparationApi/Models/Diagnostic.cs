@@ -17,8 +17,6 @@ public partial class Diagnostic
 
     public DateTime Datadiagnostic { get; set; }
 
-    public virtual User DoctorNavigation { get; set; } = null!;
-
     public virtual Medialcard Medialcard { get; set; } = null!;
 
     public virtual ICollection<Result> Results { get; set; } = new List<Result>();

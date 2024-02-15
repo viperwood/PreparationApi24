@@ -25,6 +25,8 @@ public partial class Hospitalization
 
     public string? Cancellation { get; set; }
 
+    public DateTime? Endhospital { get; set; }
+
     public virtual Condition? Conditions { get; set; }
 
     public virtual Department? Department { get; set; }

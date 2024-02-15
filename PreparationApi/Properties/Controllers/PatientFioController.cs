@@ -9,7 +9,11 @@ public class PatientFioController : Controller
     [HttpGet("GetFioPatient")]
     public IActionResult GetFioPatient()
     {
-        return Ok(Helper.Database.Users.Where(x => x.Roleuser == 3).Select(x => x.Fio).ToList());
+        return Ok(Helper.Database.Users.Where(x => x.Roleuser == 3).Select(x => new
+        {
+            x.Fio,
+            x.Userid
+        }).ToList());
     }
 
 }

@@ -8,6 +8,10 @@ public class DiagnosisController : Controller
     [HttpGet("GetDiagnosis")]
     public IActionResult GetDiagnosis()
     {
-        return Ok(Helper.Database.Diagnoses.Select(x => x.Diagnosisname).ToList());
+        return Ok(Helper.Database.Diagnoses.Select(x => new
+        {
+            x.Diagnosisname,
+            x.Diagnosisid
+        }).ToList());
     }
 }

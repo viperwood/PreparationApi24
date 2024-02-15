@@ -27,8 +27,6 @@ public partial class User
 
     public int Roleuser { get; set; }
 
-    public virtual ICollection<Diagnostic> Diagnostics { get; set; } = new List<Diagnostic>();
-
     public virtual Gender GenderNavigation { get; set; } = null!;
 
     public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();

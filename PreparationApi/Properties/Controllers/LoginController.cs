@@ -10,6 +10,7 @@ public class LoginController : Controller
     {
         return Ok(Helper.Database.Users.Where(x => x.Email == loginUser && x.Roleuser == 2).Select(x => new
         {
+            x.Userid,
             x.Fio,
             x.Email
         }).ToList());

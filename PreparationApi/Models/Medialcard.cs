@@ -17,6 +17,10 @@ public partial class Medialcard
 
     public int Medialcardcod { get; set; }
 
+    public string? Anamnesis { get; set; }
+
+    public string? Symptoms { get; set; }
+
     public virtual Diagnosis Diagnosis { get; set; } = null!;
 
     public virtual ICollection<Diagnostic> Diagnostics { get; set; } = new List<Diagnostic>();
