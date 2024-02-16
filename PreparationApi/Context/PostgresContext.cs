@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using PreparationApi.Models;
-using PreparationApi.Properties.Controllers;
 
 namespace PreparationApi.Context;
 
@@ -16,6 +15,10 @@ public partial class PostgresContext : DbContext
         : base(options)
     {
     }
+
+    public virtual DbSet<Bedoccupancy> Bedoccupancies { get; set; }
+
+    public virtual DbSet<Bedtipe> Bedtipes { get; set; }
 
     public virtual DbSet<Condition> Conditions { get; set; }
 
@@ -39,6 +42,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Patient> Patients { get; set; }
 
+    public virtual DbSet<Patient1> Patients1 { get; set; }
+
     public virtual DbSet<Patientfullinfo> Patientfullinfos { get; set; }
 
     public virtual DbSet<Placeofwork> Placeofworks { get; set; }
@@ -53,17 +58,58 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Roletable> Roletables { get; set; }
 
+    public virtual DbSet<Room> Rooms { get; set; }
+
     public virtual DbSet<TypeEvent> TypeEvents { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; username = postgres; password = 492492");
+        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; Username = postgres; Password = 492492");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pg_catalog", "adminpack");
+
+        modelBuilder.Entity<Bedoccupancy>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("bedoccupancy_pkey");
+
+            entity.ToTable("bedoccupancy", "Preparation");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Bedid).HasColumnName("bedid");
+            entity.Property(e => e.Idroom).HasColumnName("idroom");
+            entity.Property(e => e.Patientsid).HasColumnName("patientsid");
+
+            entity.HasOne(d => d.Bed).WithMany(p => p.Bedoccupancies)
+                .HasForeignKey(d => d.Bedid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("bedoccupancy_bedid_fkey");
+
+            entity.HasOne(d => d.IdroomNavigation).WithMany(p => p.Bedoccupancies)
+                .HasForeignKey(d => d.Idroom)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("bedoccupancy_idroom_fkey");
+
+            entity.HasOne(d => d.Patients).WithMany(p => p.Bedoccupancies)
+                .HasForeignKey(d => d.Patientsid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("bedoccupancy_patientsid_fkey");
+        });
+
+        modelBuilder.Entity<Bedtipe>(entity =>
+        {
+            entity.HasKey(e => e.Idbed).HasName("bedtipe_pkey");
+
+            entity.ToTable("bedtipe", "Preparation");
+
+            entity.Property(e => e.Idbed).HasColumnName("idbed");
+            entity.Property(e => e.Bedname)
+                .HasMaxLength(1)
+                .HasColumnName("bedname");
+        });
 
         modelBuilder.Entity<Condition>(entity =>
         {
@@ -308,6 +354,18 @@ public partial class PostgresContext : DbContext
                 .HasConstraintName("patient_fk");
         });
 
+        modelBuilder.Entity<Patient1>(entity =>
+        {
+            entity.HasKey(e => e.Idpatients).HasName("patients_pkey");
+
+            entity.ToTable("patients", "Preparation");
+
+            entity.Property(e => e.Idpatients).HasColumnName("idpatients");
+            entity.Property(e => e.Patientsname)
+                .HasMaxLength(100)
+                .HasColumnName("patientsname");
+        });
+
         modelBuilder.Entity<Patientfullinfo>(entity =>
         {
             entity
@@ -456,6 +514,19 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Rolename)
                 .HasMaxLength(100)
                 .HasColumnName("rolename");
+        });
+
+        modelBuilder.Entity<Room>(entity =>
+        {
+            entity.HasKey(e => e.Idroom).HasName("room_pkey");
+
+            entity.ToTable("room", "Preparation");
+
+            entity.Property(e => e.Idroom).HasColumnName("idroom");
+            entity.Property(e => e.Countbed).HasColumnName("countbed");
+            entity.Property(e => e.Roomname)
+                .HasMaxLength(100)
+                .HasColumnName("roomname");
         });
 
         modelBuilder.Entity<TypeEvent>(entity =>
