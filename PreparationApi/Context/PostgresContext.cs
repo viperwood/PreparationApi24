@@ -66,7 +66,7 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; Username = postgres; Password = 492492");
+        => optionsBuilder.UseNpgsql("Host=89.110.53.87; Database=postgres; Username = postgres; password = 492492");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -414,6 +414,7 @@ public partial class PostgresContext : DbContext
                 .HasColumnName("policyvalidity");
             entity.Property(e => e.Roleuser).HasColumnName("roleuser");
             entity.Property(e => e.Seriesp).HasColumnName("seriesp");
+            entity.Property(e => e.Userid).HasColumnName("userid");
         });
 
         modelBuilder.Entity<Placeofwork>(entity =>

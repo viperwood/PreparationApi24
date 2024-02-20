@@ -27,6 +27,8 @@ public partial class Patientfullinfo
 
     public DateTime? Birthday { get; set; }
 
+    public int? Userid { get; set; }
+
     public string? Gendername { get; set; }
 
     public string? Address { get; set; }
