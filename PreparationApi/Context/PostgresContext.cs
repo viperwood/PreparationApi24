@@ -28,6 +28,10 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Diagnostic> Diagnostics { get; set; }
 
+    public virtual DbSet<Directionschedule> Directionschedules { get; set; }
+
+    public virtual DbSet<Doctorschedule> Doctorschedules { get; set; }
+
     public virtual DbSet<Gender> Genders { get; set; }
 
     public virtual DbSet<Hospitaliz> Hospitalizs { get; set; }
@@ -60,13 +64,15 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Room> Rooms { get; set; }
 
+    public virtual DbSet<Schedule> Schedules { get; set; }
+
     public virtual DbSet<TypeEvent> TypeEvents { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=89.110.53.87; Database=postgres; Username = postgres; password = 492492");
+        => optionsBuilder.UseNpgsql("Host = 89.110.53.87; Database = postgres; Username = postgres; password = 492492");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -173,6 +179,30 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Tipeeventid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("diagnostic_tipeeventid_fkey");
+        });
+
+        modelBuilder.Entity<Directionschedule>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("directionschedule_pkey");
+
+            entity.ToTable("directionschedule", "Preparation");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Namedirection)
+                .HasMaxLength(100)
+                .HasColumnName("namedirection");
+        });
+
+        modelBuilder.Entity<Doctorschedule>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("doctorschedule_pkey");
+
+            entity.ToTable("doctorschedule", "Preparation");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Namrdoctor)
+                .HasMaxLength(100)
+                .HasColumnName("namrdoctor");
         });
 
         modelBuilder.Entity<Gender>(entity =>
@@ -528,6 +558,28 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Roomname)
                 .HasMaxLength(100)
                 .HasColumnName("roomname");
+        });
+
+        modelBuilder.Entity<Schedule>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("schedule_pkey");
+
+            entity.ToTable("schedule", "Preparation");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Direction).HasColumnName("direction");
+            entity.Property(e => e.Doctor).HasColumnName("doctor");
+            entity.Property(e => e.Timeschedule)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("timeschedule");
+
+            entity.HasOne(d => d.DirectionNavigation).WithMany(p => p.Schedules)
+                .HasForeignKey(d => d.Direction)
+                .HasConstraintName("schedule_direction_fkey");
+
+            entity.HasOne(d => d.DoctorNavigation).WithMany(p => p.Schedules)
+                .HasForeignKey(d => d.Doctor)
+                .HasConstraintName("schedule_doctor_fkey");
         });
 
         modelBuilder.Entity<TypeEvent>(entity =>
